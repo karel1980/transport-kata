@@ -9,8 +9,8 @@ public class Truck {
         this.timeToDestination = timeToDestination;
     }
 
-    static Truck idleTruck() {
-        return new Truck(null, 0);
+    static Truck idleTruck(Destination startLocation) {
+        return new Truck(startLocation, 0);
     }
 
     public Destination destination() {
@@ -32,5 +32,14 @@ public class Truck {
 
     boolean isIdle() {
         return timeToDestination() == 0;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Truck{");
+        sb.append("destination=").append(destination);
+        sb.append(", timeToDestination=").append(timeToDestination);
+        sb.append('}');
+        return sb.toString();
     }
 }
