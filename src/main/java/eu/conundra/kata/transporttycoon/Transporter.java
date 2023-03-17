@@ -10,6 +10,23 @@ public class Transporter {
     }
 
     public int solve() {
-        return 5;
+        int currentTime = 0;
+
+        while (notAllGoodsDelivered()) {
+
+            performNextStep();
+
+            currentTime++;
+        }
+
+        return currentTime;
+    }
+
+    private void performNextStep() {
+
+    }
+
+    private boolean notAllGoodsDelivered() {
+        return false;
     }
 }
