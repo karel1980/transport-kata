@@ -1,7 +1,7 @@
 package eu.conundra.kata.transporttycoon;
 
 import static eu.conundra.kata.transporttycoon.Destination.FACTORY;
-import static eu.conundra.kata.transporttycoon.Truck.idleTruck;
+import static eu.conundra.kata.transporttycoon.PackageMover.idleTruck;
 
 import java.util.List;
 

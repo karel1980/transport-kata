@@ -2,6 +2,7 @@ package eu.conundra.kata.transporttycoon;
 
 import static eu.conundra.kata.transporttycoon.Destination.B;
 import static eu.conundra.kata.transporttycoon.Destination.FACTORY;
+import static eu.conundra.kata.transporttycoon.PackageMover.createTruck;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
@@ -12,38 +13,38 @@ class StateTest {
 
     @Test
     void performStep() {
-        List<Truck> trucks = List.of(new Truck(FACTORY, 0));
+        List<PackageMover> packageMovers = List.of(createTruck());
         List<Destination> producedPackages = List.of(B);
-        State state = new State(trucks, producedPackages);
+        State state = new State(packageMovers, producedPackages);
 
         state.performStep();
 
-        assertThat(trucks)
+        assertThat(packageMovers)
             .singleElement()
             .usingRecursiveComparison()
-            .isEqualTo(new Truck(B, 4));
+            .isEqualTo(new PackageMover(B, 4));
     }
 
     @Test
     void twoTimesPerformStep() {
-        List<Truck> trucks = List.of(new Truck(FACTORY, 0));
+        List<PackageMover> packageMovers = List.of(createTruck());
         List<Destination> producedPackages = List.of(B);
-        State state = new State(trucks, producedPackages);
+        State state = new State(packageMovers, producedPackages);
 
         state.performStep();
         state.performStep();
 
-        assertThat(trucks)
+        assertThat(packageMovers)
             .singleElement()
             .usingRecursiveComparison()
-            .isEqualTo(new Truck(B, 3));
+            .isEqualTo(new PackageMover(B, 3));
     }
 
     @Test
     void allPackagesDelivered() {
-        List<Truck> trucks = List.of(new Truck(null, 0));
+        List<PackageMover> packageMovers = List.of(createTruck());
         List<Destination> producedPackages = List.of();
-        State state = new State(trucks, producedPackages);
+        State state = new State(packageMovers, producedPackages);
 
         boolean allPackagesDelivered = state.allPackagesDelivered();
 
@@ -52,20 +53,20 @@ class StateTest {
 
     @Test
     void notAllPackagesDelivered_becausePackageStillAtFactory() {
-        List<Truck> trucks = List.of(new Truck(null, 0));
+        List<PackageMover> packageMovers = List.of(createTruck());
         List<Destination> producedPackages = List.of(B);
-        State state = new State(trucks, producedPackages);
+        State state = new State(packageMovers, producedPackages);
 
         boolean allPackagesDelivered = state.allPackagesDelivered();
 
         assertThat(allPackagesDelivered).isFalse();
     }
-    
+
     @Test
     void notAllPackagesDelivered_becausePackageStillUnderWay() {
-        List<Truck> trucks = List.of(new Truck(B, 1));
-        List<Destination> producedPackages = List.of();
-        State state = new State(trucks, producedPackages);
+        List<PackageMover> packageMovers = List.of(createTruck());
+        List<Destination> producedPackages = List.of(Destination.A);
+        State state = new State(packageMovers, producedPackages);
 
         boolean allPackagesDelivered = state.allPackagesDelivered();
 

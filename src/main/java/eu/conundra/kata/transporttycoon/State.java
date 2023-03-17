@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class State {
-    private List<Truck> trucks;
+    private List<PackageMover> packageMovers;
     private List<Destination> producedPackages;
     private int notArrived;
 
-    public State(List<Truck> trucks, List<Destination> producedPackages) {
-        this.trucks = new ArrayList<>(trucks);
+    public State(List<PackageMover> packageMovers, List<Destination> producedPackages) {
+        this.packageMovers = new ArrayList<>(packageMovers);
         this.producedPackages = new ArrayList<>(producedPackages);
         this.notArrived = this.producedPackages.size();
     }
@@ -23,25 +23,25 @@ public class State {
     }
 
     private void discardIdleTrucks() {
-        trucks.removeIf(Truck::isIdle);
+        packageMovers.removeIf(PackageMover::isIdle);
     }
 
     private void loadAllTrucks() {
-        for (Truck truck : trucks) {
-            if (truck.isIdle()) {
-                if (truck.destination() == Destination.FACTORY) {
+        for (PackageMover packageMover : packageMovers) {
+            if (packageMover.isIdle()) {
+                if (packageMover.destination() == Destination.FACTORY) {
                     Destination nextProducedPackage = nextProducedPackage();
-                    truck.setState(nextProducedPackage, 5);
+                    packageMover.setState(nextProducedPackage, 5);
                 } else {
-                    truck.setState(Destination.FACTORY, 5);
+                    packageMover.setState(Destination.FACTORY, 5);
                 }
             }
         }
     }
 
     private void step() {
-        notArrived -= trucks.stream().filter(t -> t.timeToDestination() == 1).count();
-        trucks.forEach(Truck::step);
+        notArrived -= packageMovers.stream().filter(t -> t.timeToDestination() == 1).count();
+        packageMovers.forEach(PackageMover::step);
     }
 
     private Destination nextProducedPackage() {
@@ -52,15 +52,15 @@ public class State {
     }
 
     public boolean allPackagesDelivered() {
-        return producedPackages.isEmpty() && allTrucksIdle();
+        return notArrived == 0;
     }
 
     private boolean allTrucksIdle() {
-        return trucks.stream().allMatch(Truck::isIdle);
+        return packageMovers.stream().allMatch(PackageMover::isIdle);
     }
 
     public void report(int currentTime) {
         System.out.printf("at %d%n", currentTime);
-        trucks.forEach(System.out::println);
+        packageMovers.forEach(System.out::println);
     }
 }
