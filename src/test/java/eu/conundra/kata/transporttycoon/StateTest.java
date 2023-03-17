@@ -28,7 +28,7 @@ class StateTest {
         List<Destination> producedPackages = List.of(Destination.B);
         State state = new State(trucks, producedPackages);
 
-        state.performmob nextStep();
+        state.performStep();
         state.performStep();
 
         assertThat(trucks)
