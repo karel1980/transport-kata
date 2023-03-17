@@ -1,20 +1,26 @@
 package eu.conundra.kata.transporttycoon;
 
+import static eu.conundra.kata.transporttycoon.Truck.idleTruck;
+
 import java.util.List;
 
 public class Transporter {
-    private final List<String> goodToTransport;
+    private final List<Destination> goodToTransport;
 
-    public Transporter(List<String> goodToTransport) {
+    public Transporter(List<Destination> goodToTransport) {
         this.goodToTransport = goodToTransport;
     }
 
     public int solve() {
+        State state = new State(
+            List.of(idleTruck(), idleTruck()),
+            goodToTransport
+        );
         int currentTime = 0;
 
-        while (notAllGoodsDelivered()) {
+        while (!state.allPackagesDelivered()) {
 
-            performNextStep();
+            state.performStep();
 
             currentTime++;
         }
@@ -22,11 +28,4 @@ public class Transporter {
         return currentTime;
     }
 
-    private void performNextStep() {
-
-    }
-
-    private boolean notAllGoodsDelivered() {
-        return false;
-    }
 }
