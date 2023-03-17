@@ -6,6 +6,7 @@ import java.util.List;
 
 public class PackageMover {
     private List<Route> routes;
+    private Destination loadLocation;
     private Destination targetLocation;
     private int timeToDestination;
 
@@ -14,8 +15,13 @@ public class PackageMover {
     }
 
     public PackageMover(Destination startLocation, int timeToDestination) {
+        this(startLocation, startLocation, timeToDestination);
+    }
+
+    public PackageMover(Destination startLocation, Destination loadLocation, int timeToDestination) {
         this.routes = World.WORLD.routesStartAt(FACTORY);
         this.targetLocation = startLocation;
+        this.loadLocation = loadLocation;
         this.timeToDestination = timeToDestination;
     }
 
@@ -55,5 +61,9 @@ public class PackageMover {
         sb.append(", timeToDestination=").append(timeToDestination);
         sb.append('}');
         return sb.toString();
+    }
+
+    public boolean canUnload(Destination location) {
+        return isIdle() && location == targetLocation && location != loadLocation;
     }
 }

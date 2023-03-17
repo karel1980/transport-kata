@@ -22,7 +22,7 @@ class StateTest {
         assertThat(packageMovers)
             .singleElement()
             .usingRecursiveComparison()
-            .isEqualTo(new PackageMover(B, 4));
+            .isEqualTo(new PackageMover(B, FACTORY, 4));
     }
 
     @Test
@@ -37,7 +37,7 @@ class StateTest {
         assertThat(packageMovers)
             .singleElement()
             .usingRecursiveComparison()
-            .isEqualTo(new PackageMover(B, 3));
+            .isEqualTo(new PackageMover(B, FACTORY, 3));
     }
 
     @Test
