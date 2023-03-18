@@ -8,22 +8,24 @@ import java.util.List;
 public class PackageMover {
     private List<Route> routes;
     private Destination loadLocation;
-    private Destination targetLocation;
+    private Destination destination;
     private int timeToDestination;
+    private Package loadedPackage;
 
-    public PackageMover(Destination startLocation) {
-        this(startLocation, 0);
+    public PackageMover(Destination loadLocation) {
+        this(loadLocation, loadLocation, 0);
     }
 
-    public PackageMover(Destination startLocation, int timeToDestination) {
-        this(startLocation, startLocation, timeToDestination);
+    public PackageMover(Destination initialDestination, Destination loadLocation, int timeToDestination) {
+        this(initialDestination, loadLocation, timeToDestination, null);
     }
 
-    public PackageMover(Destination startLocation, Destination loadLocation, int timeToDestination) {
+    public PackageMover(Destination destination, Destination loadLocation, int timeToDestination, Package loadedPackage) {
         this.routes = World.WORLD.routesStartAt(FACTORY);
-        this.targetLocation = startLocation;
+        this.destination = destination;
         this.loadLocation = loadLocation;
         this.timeToDestination = timeToDestination;
+        this.loadedPackage = loadedPackage;
     }
 
     public static PackageMover createTruck() {
@@ -34,20 +36,12 @@ public class PackageMover {
         return new PackageMover(PORT);
     }
 
-    static PackageMover idleTruck(Destination startLocation) {
-        return new PackageMover(startLocation, 0);
-    }
-
-    static PackageMover idleShip(Destination startLocation) {
-        return new PackageMover(startLocation, 0);
-    }
-
     public Destination loadLocation() {
         return loadLocation;
     }
 
     public Destination destination() {
-        return targetLocation;
+        return destination;
     }
 
     public int timeToDestination() {
@@ -55,7 +49,7 @@ public class PackageMover {
     }
 
     public void setState(Destination destination, int timeToDestination) {
-        this.targetLocation = destination;
+        this.destination = destination;
         this.timeToDestination = timeToDestination;
     }
 
@@ -67,20 +61,40 @@ public class PackageMover {
         return timeToDestination() == 0;
     }
 
+    boolean containsPackage() {
+        return loadedPackage != null;
+    }
+
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Truck{");
-        sb.append("destination=").append(targetLocation);
+        final StringBuilder sb = new StringBuilder("PackageMover{");
+        sb.append("destination=").append(destination);
         sb.append(", timeToDestination=").append(timeToDestination);
         sb.append('}');
         return sb.toString();
     }
 
-    public boolean canUnload(Destination location) {
-        return isIdle() && location == targetLocation && location != loadLocation;
+    void driveBackToLoadLocation() {
+        setState(loadLocation, World.WORLD.distanceBetween(destination, loadLocation));
     }
 
-    void driveBackToLoadLocation() {
-        setState(loadLocation, World.WORLD.distanceBetween(targetLocation, loadLocation));
+    boolean isAtLoadLocation() {
+        return destination() == loadLocation();
+    }
+
+    public void load(Package pkg, Destination nextStop) {
+        this.loadedPackage = pkg;
+        setState(nextStop, World.WORLD.distanceBetween(loadLocation, nextStop));
+    }
+
+    public Package unload() {
+        if (loadedPackage == null) {
+            throw new IllegalStateException("Cannot unload when there is no loaded package");
+        }
+        try {
+            return loadedPackage;
+        } finally {
+            loadedPackage = null;
+        }
     }
 }

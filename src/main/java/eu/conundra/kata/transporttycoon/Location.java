@@ -8,8 +8,8 @@ import java.util.Queue;
 
 public class Location {
 
-    private Destination name;
-    private Queue<Package> packages;
+    private final Destination name;
+    private final Queue<Package> packages;
 
     public Location(Destination name, List<Package> packages) {
         this.name = Objects.requireNonNull(name);
@@ -17,7 +17,7 @@ public class Location {
     }
 
     public boolean hasPackages() {
-        return packages.isEmpty();
+        return !packages.isEmpty();
     }
 
     public Package pickupNext() {
@@ -25,7 +25,15 @@ public class Location {
             .orElseThrow();
     }
 
+    public Destination name() {
+        return name;
+    }
+
     public void deliver(Package pkg) {
         packages.add(pkg);
+    }
+
+    public int countPackages() {
+        return packages.size();
     }
 }

@@ -4,33 +4,39 @@ import static eu.conundra.kata.transporttycoon.Destination.A;
 import static eu.conundra.kata.transporttycoon.Destination.B;
 import static eu.conundra.kata.transporttycoon.Destination.FACTORY;
 import static eu.conundra.kata.transporttycoon.Destination.PORT;
-import static eu.conundra.kata.transporttycoon.PackageMover.idleShip;
-import static eu.conundra.kata.transporttycoon.PackageMover.idleTruck;
+import static eu.conundra.kata.transporttycoon.PackageMover.createShip;
+import static eu.conundra.kata.transporttycoon.PackageMover.createTruck;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 
 public class State {
     private List<PackageMover> packageMovers;
-    private List<Package> packagesAtFactory;
-    private final int totalPackages;
-    private int packagesAtPort = 0;
-    private int packagesAtA = 0;
-    private int packagesAtB = 0;
+    private Map<Destination, Location> locations;
     private boolean debug = false;
 
     public State(List<Package> packagesAtFactory) {
-        this(List.of(idleTruck(FACTORY), idleTruck(FACTORY), idleShip(PORT)), packagesAtFactory);
+        this(List.of(createTruck(), createTruck(), createShip()), packagesAtFactory);
     }
 
     public State(List<PackageMover> packageMovers, List<Package> packagesAtFactory) {
         this.packageMovers = new ArrayList<>(packageMovers);
-        this.packagesAtFactory = new ArrayList<>(packagesAtFactory);
-        this.totalPackages = packagesAtFactory.size();
+
+        this.locations = Stream.of(
+                new Location(FACTORY, new ArrayList<>(packagesAtFactory)),
+                new Location(PORT, new ArrayList<>()),
+                new Location(A, new ArrayList<>()),
+                new Location(B, new ArrayList<>())
+            )
+            .collect(toMap(Location::name, identity()));
     }
 
     public void performStep() {
-        loadAllTrucks();
+        loadPackages();
         step();
         unloadPackages();
 
@@ -39,35 +45,29 @@ public class State {
         }
     }
 
-    private void loadAllTrucks() {
+    private void loadPackages() {
         for (PackageMover packageMover : packageMovers) {
             if (packageMover.isIdle()) {
-                if (packageMover.destination() == packageMover.loadLocation()) {
-                    if (packageMover.loadLocation() == FACTORY) {
-                        // A truck is loaded by taking a package from the factory
-                        Package nextProducedPackage = takeNextPackageFromFactory();
-                        if (nextProducedPackage != null) {
-                            // hardcoded information about the world
-                            if (nextProducedPackage.destination() == A) {
-                                packageMover.setState(PORT, 1);
-                            } else {
-                                packageMover.setState(B, 5);
-                            }
-                        }
-                    } else {
-                        // A ship is loaded by taking a package from the port
-                        if (packagesAtPort > 0) {
-                            // this is weird, we're hardcoding knowledge about the world (load at port == ship)
-                            packageMover.setState(A, 4);
-                            packagesAtPort--;
-                        }
+                if (packageMover.isAtLoadLocation()) {
+                    Location location = locations.get(packageMover.loadLocation());
+                    if (location.hasPackages()) {
+                        Package pkg = location.pickupNext();
+                        Destination nextStop = determineNextStop(location.name(), pkg.destination());
+                        packageMover.load(pkg, nextStop);
                     }
                 } else {
-                    // drive back to load location
                     packageMover.driveBackToLoadLocation();
                 }
             }
         }
+    }
+
+    private Destination determineNextStop(Destination currentLocation, Destination destination) {
+        return switch (destination) {
+            case A -> currentLocation == FACTORY ? PORT : A;
+            case B -> B;
+            default -> throw new RuntimeException("Not a valid package destination:" + destination);
+        };
     }
 
     private void step() {
@@ -78,42 +78,33 @@ public class State {
 
     private void unloadPackages() {
         packageMovers.stream()
+            .filter(PackageMover::containsPackage)
             .filter(PackageMover::isIdle)
-            .forEach(arrivedMover -> {
-                if (arrivedMover.canUnload(A)) {
-                    packagesAtA++;
-                }
-                if (arrivedMover.canUnload(B)) {
-                    packagesAtB++;
-                }
-                if (arrivedMover.canUnload(PORT)) {
-                    packagesAtPort++;
-                }
+            .forEach(mover -> {
+                Package pkg = mover.unload();
+                locations.get(mover.destination()).deliver(pkg);
             });
     }
 
-    private Package takeNextPackageFromFactory() {
-        if (packagesAtFactory.isEmpty()) {
-            return null;
-        }
-        return packagesAtFactory.remove(0);
-    }
-
     public boolean allPackagesDelivered() {
-        return packagesAtA + packagesAtB == totalPackages;
+        long nonDelivered = locations.get(FACTORY).countPackages() + locations.get(PORT).countPackages() + packageMovers.stream()
+            .filter(PackageMover::containsPackage)
+            .count();
+
+        return nonDelivered == 0;
     }
 
     public void report() {
         System.out.printf("Current state:%n");
         packageMovers.forEach(System.out::println);
 
-        System.out.printf("#packages at port    :%d%n", packagesAtPort);
-        System.out.printf("#packages at A       :%d%n", packagesAtA);
-        System.out.printf("#packages at B       :%d%n", packagesAtB);
-        System.out.printf("#packages at factory :%d%n", packagesAtFactory.size());
+        System.out.printf("#packages at factory :%d%n", locations.get(FACTORY).countPackages());
+        System.out.printf("#packages at port    :%d%n", locations.get(PORT).countPackages());
+        System.out.printf("#packages at A       :%d%n", locations.get(A).countPackages());
+        System.out.printf("#packages at B       :%d%n", locations.get(B).countPackages());
     }
 
     public int packagesAtPort() {
-        return packagesAtPort;
+        return locations.get(PORT).countPackages();
     }
 }

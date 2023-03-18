@@ -2,7 +2,6 @@ package eu.conundra.kata.transporttycoon;
 
 import static eu.conundra.kata.transporttycoon.Destination.B;
 import static eu.conundra.kata.transporttycoon.Destination.FACTORY;
-import static eu.conundra.kata.transporttycoon.Destination.PORT;
 import static eu.conundra.kata.transporttycoon.Package.createPackages;
 import static eu.conundra.kata.transporttycoon.PackageMover.createShip;
 import static eu.conundra.kata.transporttycoon.PackageMover.createTruck;
@@ -25,12 +24,12 @@ class StateTest {
         assertThat(packageMovers)
             .singleElement()
             .usingRecursiveComparison()
-            .isEqualTo(new PackageMover(B, FACTORY, 4));
+            .isEqualTo(new PackageMover(B, FACTORY, 4, producedPackages.get(0)));
     }
 
     @Test
     void performStep_incrementsPackageCountWhenUnloading() {
-        List<PackageMover> packageMovers = List.of(new PackageMover(PORT, FACTORY, 1));
+        List<PackageMover> packageMovers = List.of(new PackageMover(FACTORY));
         State state = new State(packageMovers, createPackages("AAAA"));
 
         state.performStep();
@@ -61,8 +60,8 @@ class StateTest {
     @Test
     void twoTimesPerformStep() {
         List<PackageMover> packageMovers = List.of(createTruck());
-        List<Package> producedPackages = createPackages("B");
-        State state = new State(packageMovers, producedPackages);
+        List<Package> packages = createPackages("B");
+        State state = new State(packageMovers, packages);
 
         state.performStep();
         state.performStep();
@@ -70,7 +69,7 @@ class StateTest {
         assertThat(packageMovers)
             .singleElement()
             .usingRecursiveComparison()
-            .isEqualTo(new PackageMover(B, FACTORY, 3));
+            .isEqualTo(new PackageMover(B, FACTORY, 3, packages.get(0)));
     }
 
     @Test
