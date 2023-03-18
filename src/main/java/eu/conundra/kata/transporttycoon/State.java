@@ -15,9 +15,8 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class State {
-    private List<PackageMover> packageMovers;
-    private Map<Destination, Location> locations;
-    private boolean debug = false;
+    private final List<PackageMover> packageMovers;
+    private final Map<Destination, Location> locations;
 
     public State(List<Package> packagesAtFactory) {
         this(List.of(createTruck(), createTruck(), createShip()), packagesAtFactory);
@@ -39,10 +38,6 @@ public class State {
         loadPackages();
         step();
         unloadPackages();
-
-        if (debug) {
-            report();
-        }
     }
 
     private void loadPackages() {
@@ -63,11 +58,14 @@ public class State {
     }
 
     private Destination determineNextStop(Destination currentLocation, Destination destination) {
-        return switch (destination) {
-            case A -> currentLocation == FACTORY ? PORT : A;
-            case B -> B;
-            default -> throw new RuntimeException("Not a valid package destination:" + destination);
-        };
+        if (destination.equals(Destination.A)) {
+            return currentLocation == FACTORY ? PORT : A;
+        }
+        if (destination.equals(Destination.B)) {
+            return B;
+        }
+
+        throw new IllegalArgumentException("Not a valid package destination:" + destination);
     }
 
     private void step() {

@@ -3,11 +3,8 @@ package eu.conundra.kata.transporttycoon;
 import static eu.conundra.kata.transporttycoon.Destination.FACTORY;
 import static eu.conundra.kata.transporttycoon.Destination.PORT;
 
-import java.util.List;
-
 public class PackageMover {
-    private List<Route> routes;
-    private Destination loadLocation;
+    private final Destination loadLocation;
     private Destination destination;
     private int timeToDestination;
     private Package loadedPackage;
@@ -21,7 +18,6 @@ public class PackageMover {
     }
 
     public PackageMover(Destination destination, Destination loadLocation, int timeToDestination, Package loadedPackage) {
-        this.routes = World.WORLD.routesStartAt(FACTORY);
         this.destination = destination;
         this.loadLocation = loadLocation;
         this.timeToDestination = timeToDestination;

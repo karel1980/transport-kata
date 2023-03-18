@@ -9,7 +9,7 @@ public record Package(
     static List<Package> createPackages(String spec) {
         return Stream.of(spec.split(""))
             .filter(s -> !s.isEmpty())
-            .map(Destination::valueOf)
+            .map(Destination::new)
             .map(Package::new)
             .toList();
     }
