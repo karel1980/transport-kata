@@ -22,7 +22,7 @@ public class World {
 
     public int distanceBetween(Destination from, Destination to) {
         return routes.stream()
-            .filter(r -> (r.source() == from && r.target() == to) || (r.source() == to && r.target() == from))
+            .filter(r -> r.matches(from, to))
             .map(Route::length)
             .findFirst()
             .orElseThrow(() -> new RuntimeException("No route found between %s and %s".formatted(from, to)));

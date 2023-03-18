@@ -8,17 +8,14 @@ import static eu.conundra.kata.transporttycoon.PackageMover.idleTruck;
 import java.util.List;
 
 public class Transporter {
-    private final List<Destination> goodToTransport;
+    private final List<Destination> packagesToTransport;
 
-    public Transporter(List<Destination> goodToTransport) {
-        this.goodToTransport = goodToTransport;
+    public Transporter(List<Destination> packagesToTransport) {
+        this.packagesToTransport = packagesToTransport;
     }
 
     public int solve() {
-        State state = new State(
-            List.of(idleTruck(FACTORY), idleTruck(FACTORY), idleShip(PORT)),
-            goodToTransport
-        );
+        State state = new State(packagesToTransport);
         int currentTime = 0;
 
         while (!state.allPackagesDelivered()) {

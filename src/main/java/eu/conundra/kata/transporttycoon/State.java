@@ -4,6 +4,8 @@ import static eu.conundra.kata.transporttycoon.Destination.A;
 import static eu.conundra.kata.transporttycoon.Destination.B;
 import static eu.conundra.kata.transporttycoon.Destination.FACTORY;
 import static eu.conundra.kata.transporttycoon.Destination.PORT;
+import static eu.conundra.kata.transporttycoon.PackageMover.idleShip;
+import static eu.conundra.kata.transporttycoon.PackageMover.idleTruck;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,10 @@ public class State {
     private int packagesAtA = 0;
     private int packagesAtB = 0;
     private boolean debug = false;
+
+    public State(List<Destination> packagesAtFactory) {
+        this(List.of(idleTruck(FACTORY), idleTruck(FACTORY), idleShip(PORT)), packagesAtFactory);
+    }
 
     public State(List<PackageMover> packageMovers, List<Destination> packagesAtFactory) {
         this.packageMovers = new ArrayList<>(packageMovers);
