@@ -1,7 +1,5 @@
 package eu.conundra.kata.transporttycoon;
 
-import static eu.conundra.kata.transporttycoon.Destination.A;
-import static eu.conundra.kata.transporttycoon.Destination.B;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
@@ -10,69 +8,81 @@ import java.util.List;
 import java.util.stream.Stream;
 
 class TransportTest {
+
+    Transporter transporter = new Transporter();
+
     @Test
     void testA() {
-        List<Destination> given = List.of(A);
+        int actual = solve("A");
 
-        Transporter transporter = new Transporter(given);
-        assertThat(transporter.solve()).isEqualTo(5);
+        assertThat(actual)
+            .isEqualTo(5);
     }
 
     @Test
     void testB() {
-        List<Destination> given = List.of(B);
+        int actual = solve("B");
 
-        Transporter transporter = new Transporter(given);
-        assertThat(transporter.solve()).isEqualTo(5);
+        assertThat(actual)
+            .isEqualTo(5);
     }
 
     @Test
     void testBB() {
-        List<Destination> given = List.of(B, B);
+        int actual = solve("BB");
 
-        Transporter transporter = new Transporter(given);
-        assertThat(transporter.solve()).isEqualTo(5);
+        assertThat(actual)
+            .isEqualTo(5);
     }
 
     @Test
     void testBBB() {
-        List<Destination> given = List.of(B, B, B);
+        int actual = solve("BBB");
 
-        Transporter transporter = new Transporter(given);
-        assertThat(transporter.solve()).isEqualTo(15);
+        assertThat(actual)
+            .isEqualTo(15);
     }
 
     @Test
     void testAB() {
-        List<Destination> given = List.of(A, B);
+        int actual = solve("AB");
 
-        Transporter transporter = new Transporter(given);
-        assertThat(transporter.solve()).isEqualTo(5);
+        assertThat(actual)
+            .isEqualTo(5);
     }
 
     @Test
     void testABB() {
-        List<Destination> given = List.of(A, B, B);
+        int actual = solve("ABB");
 
-        Transporter transporter = new Transporter(given);
-        assertThat(transporter.solve()).isEqualTo(7);
+        assertThat(actual)
+            .isEqualTo(7);
     }
 
     @Test
     void testAABABBAB() {
-        List<Destination> given = Stream.of("AABABBAB".split(""))
-            .map(Destination::valueOf)
-            .toList();
+        int actual = solve("AABABBAB");
 
-        assertThat(new Transporter(given).solve()).isEqualTo(29);
+        assertThat(actual)
+            .isEqualTo(29);
     }
 
     @Test
     void testABBBABAAABBB() {
-        List<Destination> given = Stream.of("ABBBABAAABBB".split("")) // #notproud
-            .map(Destination::valueOf)
-            .toList();
+        int actual = solve("ABBBABAAABBB");
 
-        assertThat(new Transporter(given).solve()).isEqualTo(41);
+        assertThat(actual)
+            .isEqualTo(41);
+    }
+
+    private List<Package> createPackages(String spec) {
+        return Stream.of(spec.split(""))
+            .map(Destination::valueOf)
+            .map(Package::new)
+            .toList();
+    }
+
+    private int solve(String spec) {
+        return transporter.solve(createPackages(spec));
     }
 }

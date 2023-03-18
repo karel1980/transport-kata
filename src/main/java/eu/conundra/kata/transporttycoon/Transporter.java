@@ -1,21 +1,13 @@
 package eu.conundra.kata.transporttycoon;
 
-import static eu.conundra.kata.transporttycoon.Destination.FACTORY;
-import static eu.conundra.kata.transporttycoon.Destination.PORT;
-import static eu.conundra.kata.transporttycoon.PackageMover.idleShip;
-import static eu.conundra.kata.transporttycoon.PackageMover.idleTruck;
-
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Transporter {
-    private final List<Destination> packagesToTransport;
-
-    public Transporter(List<Destination> packagesToTransport) {
-        this.packagesToTransport = packagesToTransport;
-    }
-
-    public int solve() {
-        State state = new State(packagesToTransport);
+    public int solve(List<Package> packages) {
+        State state = new State(packages.stream()
+            .map(Package::destination)
+            .collect(Collectors.toList()));
         int currentTime = 0;
 
         while (!state.allPackagesDelivered()) {
