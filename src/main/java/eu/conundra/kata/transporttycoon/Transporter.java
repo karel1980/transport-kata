@@ -21,7 +21,6 @@ public class Transporter {
 
         while (!state.allPackagesDelivered()) {
             state.performStep();
-            state.report(currentTime);
             currentTime++;
 
             if (currentTime > 1000) {

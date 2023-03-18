@@ -1,6 +1,7 @@
 package eu.conundra.kata.transporttycoon;
 
 import static eu.conundra.kata.transporttycoon.Destination.FACTORY;
+import static eu.conundra.kata.transporttycoon.Destination.PORT;
 
 import java.util.List;
 
@@ -29,8 +30,16 @@ public class PackageMover {
         return new PackageMover(FACTORY);
     }
 
+    public static PackageMover createShip() {
+        return new PackageMover(PORT);
+    }
+
     static PackageMover idleTruck(Destination startLocation) {
         return new PackageMover(startLocation, 0);
+    }
+
+    public Destination loadLocation() {
+        return loadLocation;
     }
 
     public Destination destination() {
@@ -65,5 +74,9 @@ public class PackageMover {
 
     public boolean canUnload(Destination location) {
         return isIdle() && location == targetLocation && location != loadLocation;
+    }
+
+    void driveBackToLoadLocation() {
+        setState(FACTORY, 5);
     }
 }
