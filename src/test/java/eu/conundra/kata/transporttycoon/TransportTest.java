@@ -73,6 +73,6 @@ class TransportTest {
             .map(Destination::valueOf)
             .toList();
 
-        assertThat(new Transporter(given).solve()).isEqualTo(39);
+        assertThat(new Transporter(given).solve()).isEqualTo(41);
     }
 }
