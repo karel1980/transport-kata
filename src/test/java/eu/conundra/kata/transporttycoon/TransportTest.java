@@ -40,4 +40,20 @@ class TransportTest {
         Transporter transporter = new Transporter(given);
         assertThat(transporter.solve()).isEqualTo(15);
     }
+
+    @Test
+    void testAB() {
+        List<Destination> given = List.of(A, B);
+
+        Transporter transporter = new Transporter(given);
+        assertThat(transporter.solve()).isEqualTo(5);
+    }
+
+    @Test
+    void testABB() {
+        List<Destination> given = List.of(A, B, B);
+
+        Transporter transporter = new Transporter(given);
+        assertThat(transporter.solve()).isEqualTo(7);
+    }
 }

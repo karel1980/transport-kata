@@ -38,6 +38,10 @@ public class PackageMover {
         return new PackageMover(startLocation, 0);
     }
 
+    static PackageMover idleShip(Destination startLocation) {
+        return new PackageMover(startLocation, 0);
+    }
+
     public Destination loadLocation() {
         return loadLocation;
     }
@@ -77,6 +81,6 @@ public class PackageMover {
     }
 
     void driveBackToLoadLocation() {
-        setState(FACTORY, 5);
+        setState(loadLocation, World.WORLD.distanceBetween(targetLocation, loadLocation));
     }
 }

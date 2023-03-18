@@ -1,6 +1,8 @@
 package eu.conundra.kata.transporttycoon;
 
 import static eu.conundra.kata.transporttycoon.Destination.FACTORY;
+import static eu.conundra.kata.transporttycoon.Destination.PORT;
+import static eu.conundra.kata.transporttycoon.PackageMover.idleShip;
 import static eu.conundra.kata.transporttycoon.PackageMover.idleTruck;
 
 import java.util.List;
@@ -14,7 +16,7 @@ public class Transporter {
 
     public int solve() {
         State state = new State(
-            List.of(idleTruck(FACTORY), idleTruck(FACTORY)),
+            List.of(idleTruck(FACTORY), idleTruck(FACTORY), idleShip(PORT)),
             goodToTransport
         );
         int currentTime = 0;

@@ -1,20 +1,31 @@
 package eu.conundra.kata.transporttycoon;
 
+import static eu.conundra.kata.transporttycoon.Destination.A;
+import static eu.conundra.kata.transporttycoon.Destination.B;
+import static eu.conundra.kata.transporttycoon.Destination.FACTORY;
+import static eu.conundra.kata.transporttycoon.Destination.PORT;
+
 import java.util.List;
 
 public class World {
-    private List<Destination> places;
     private List<Route> routes;
 
     public static World WORLD = new World();
 
     private World() {
-        this.places = List.of(Destination.values());
         this.routes = List.of(
-            new Route(Destination.FACTORY, Destination.PORT, 1),
-            new Route(Destination.PORT, Destination.A, 4),
-            new Route(Destination.FACTORY, Destination.B, 5)
+            new Route(FACTORY, PORT, 1),
+            new Route(PORT, A, 4),
+            new Route(FACTORY, B, 5)
         );
+    }
+
+    public int distanceBetween(Destination from, Destination to) {
+        return routes.stream()
+            .filter(r -> (r.source() == from && r.target() == to) || (r.source() == to && r.target() == from))
+            .map(Route::length)
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("No route found between %s and %s".formatted(from, to)));
     }
 
     public List<Route> routesStartAt(Destination destination) {
