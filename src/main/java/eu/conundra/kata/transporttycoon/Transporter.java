@@ -1,13 +1,10 @@
 package eu.conundra.kata.transporttycoon;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Transporter {
     public int solve(List<Package> packages) {
-        State state = new State(packages.stream()
-            .map(Package::destination)
-            .collect(Collectors.toList()));
+        State state = new State(packages);
         int currentTime = 0;
 
         while (!state.allPackagesDelivered()) {

@@ -4,9 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-import java.util.stream.Stream;
-
 class TransportTest {
 
     Transporter transporter = new Transporter();
@@ -75,14 +72,7 @@ class TransportTest {
             .isEqualTo(41);
     }
 
-    private List<Package> createPackages(String spec) {
-        return Stream.of(spec.split(""))
-            .map(Destination::valueOf)
-            .map(Package::new)
-            .toList();
-    }
-
     private int solve(String spec) {
-        return transporter.solve(createPackages(spec));
+        return transporter.solve(Package.createPackages(spec));
     }
 }

@@ -1,9 +1,9 @@
 package eu.conundra.kata.transporttycoon;
 
-import static eu.conundra.kata.transporttycoon.Destination.A;
 import static eu.conundra.kata.transporttycoon.Destination.B;
 import static eu.conundra.kata.transporttycoon.Destination.FACTORY;
 import static eu.conundra.kata.transporttycoon.Destination.PORT;
+import static eu.conundra.kata.transporttycoon.Package.createPackages;
 import static eu.conundra.kata.transporttycoon.PackageMover.createShip;
 import static eu.conundra.kata.transporttycoon.PackageMover.createTruck;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,7 +17,7 @@ class StateTest {
     @Test
     void performStep() {
         List<PackageMover> packageMovers = List.of(createTruck());
-        List<Destination> producedPackages = List.of(B);
+        List<Package> producedPackages = createPackages("B");
         State state = new State(packageMovers, producedPackages);
 
         state.performStep();
@@ -31,7 +31,7 @@ class StateTest {
     @Test
     void performStep_incrementsPackageCountWhenUnloading() {
         List<PackageMover> packageMovers = List.of(new PackageMover(PORT, FACTORY, 1));
-        State state = new State(packageMovers, List.of(A, A, A, A));
+        State state = new State(packageMovers, createPackages("AAAA"));
 
         state.performStep();
 
@@ -45,7 +45,7 @@ class StateTest {
             createTruck(),
             createShip()
         );
-        State state = new State(packageMovers, List.of(A));
+        State state = new State(packageMovers, createPackages("A"));
 
         state.performStep();
 
@@ -61,7 +61,7 @@ class StateTest {
     @Test
     void twoTimesPerformStep() {
         List<PackageMover> packageMovers = List.of(createTruck());
-        List<Destination> producedPackages = List.of(B);
+        List<Package> producedPackages = createPackages("B");
         State state = new State(packageMovers, producedPackages);
 
         state.performStep();
@@ -76,7 +76,7 @@ class StateTest {
     @Test
     void allPackagesDelivered() {
         List<PackageMover> packageMovers = List.of(createTruck());
-        List<Destination> producedPackages = List.of();
+        List<Package> producedPackages = createPackages("");
         State state = new State(packageMovers, producedPackages);
 
         boolean allPackagesDelivered = state.allPackagesDelivered();
@@ -87,7 +87,7 @@ class StateTest {
     @Test
     void notAllPackagesDelivered_becausePackageStillAtFactory() {
         List<PackageMover> packageMovers = List.of(createTruck());
-        List<Destination> producedPackages = List.of(B);
+        List<Package> producedPackages = createPackages("B");
         State state = new State(packageMovers, producedPackages);
 
         boolean allPackagesDelivered = state.allPackagesDelivered();
@@ -98,7 +98,7 @@ class StateTest {
     @Test
     void notAllPackagesDelivered_becausePackageStillUnderWay() {
         List<PackageMover> packageMovers = List.of(createTruck());
-        List<Destination> producedPackages = List.of(A);
+        List<Package> producedPackages = createPackages("A");
         State state = new State(packageMovers, producedPackages);
 
         boolean allPackagesDelivered = state.allPackagesDelivered();

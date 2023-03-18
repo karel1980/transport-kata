@@ -12,18 +12,18 @@ import java.util.List;
 
 public class State {
     private List<PackageMover> packageMovers;
-    private List<Destination> packagesAtFactory;
+    private List<Package> packagesAtFactory;
     private final int totalPackages;
     private int packagesAtPort = 0;
     private int packagesAtA = 0;
     private int packagesAtB = 0;
     private boolean debug = false;
 
-    public State(List<Destination> packagesAtFactory) {
+    public State(List<Package> packagesAtFactory) {
         this(List.of(idleTruck(FACTORY), idleTruck(FACTORY), idleShip(PORT)), packagesAtFactory);
     }
 
-    public State(List<PackageMover> packageMovers, List<Destination> packagesAtFactory) {
+    public State(List<PackageMover> packageMovers, List<Package> packagesAtFactory) {
         this.packageMovers = new ArrayList<>(packageMovers);
         this.packagesAtFactory = new ArrayList<>(packagesAtFactory);
         this.totalPackages = packagesAtFactory.size();
@@ -45,10 +45,10 @@ public class State {
                 if (packageMover.destination() == packageMover.loadLocation()) {
                     if (packageMover.loadLocation() == FACTORY) {
                         // A truck is loaded by taking a package from the factory
-                        Destination nextProducedPackage = takeNextPackageFromFactory();
+                        Package nextProducedPackage = takeNextPackageFromFactory();
                         if (nextProducedPackage != null) {
                             // hardcoded information about the world
-                            if (nextProducedPackage == A) {
+                            if (nextProducedPackage.destination() == A) {
                                 packageMover.setState(PORT, 1);
                             } else {
                                 packageMover.setState(B, 5);
@@ -92,7 +92,7 @@ public class State {
             });
     }
 
-    private Destination takeNextPackageFromFactory() {
+    private Package takeNextPackageFromFactory() {
         if (packagesAtFactory.isEmpty()) {
             return null;
         }
@@ -101,10 +101,6 @@ public class State {
 
     public boolean allPackagesDelivered() {
         return packagesAtA + packagesAtB == totalPackages;
-    }
-
-    private boolean allTrucksIdle() {
-        return packageMovers.stream().allMatch(PackageMover::isIdle);
     }
 
     public void report() {
@@ -119,13 +115,5 @@ public class State {
 
     public int packagesAtPort() {
         return packagesAtPort;
-    }
-
-    public int packagesAtA() {
-        return packagesAtA;
-    }
-
-    public int packagesAtB() {
-        return packagesAtB;
     }
 }
