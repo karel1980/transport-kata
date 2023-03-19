@@ -13,16 +13,19 @@ public class Transporter {
     private int position2 = 0;
     private String payload2 = "";
 
+
     public Transporter(List<String> factoryPackages) {
         this.factoryPackages = new LinkedList<>(factoryPackages);
     }
 
     public int solve() {
+        var iterations = -1;
         do {
+            iterations++;
+            if (iterations > 100) return 0;
             dropPackage();
             pickUpPackage();
             move();
-            if(!done()) iterations++;
         } while (!done());
         return iterations;
     }
@@ -66,12 +69,9 @@ public class Transporter {
         }
     }
 
-    private int iterations = 0;
-
     private boolean done() {
-        if (iterations > 100) {
-            return true;
-        }
-        return payload1.equals("") && payload2.equals("") && factoryPackages.isEmpty();
+        return factoryPackages.isEmpty()
+            && payload1.equals("")
+            && payload2.equals("");
     }
 }
