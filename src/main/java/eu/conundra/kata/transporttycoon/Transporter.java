@@ -7,11 +7,8 @@ import java.util.Queue;
 
 public class Transporter {
     private final Queue<String> factoryPackages;
-    private final List<String> bPackages = new ArrayList<>();
-    private int position1 = 0;
-    private String payload1 = "";
-    private int position2 = 0;
-    private String payload2 = "";
+    private final List<String> destination = new ArrayList<>();
+    private final List<Truck> trucks = List.of(new Truck(), new Truck());
 
 
     public Transporter(List<String> factoryPackages) {
@@ -21,8 +18,8 @@ public class Transporter {
     public int solve() {
         var iterations = -1;
         do {
+            if (iterations > 100) throw new RuntimeException("Could not find a solution within 100 iterations");
             iterations++;
-            if (iterations > 100) return 0;
             dropPackage();
             pickUpPackage();
             move();
@@ -31,47 +28,28 @@ public class Transporter {
     }
 
     private void dropPackage() {
-        if (position1 == 5) {
-            bPackages.add(payload1);
-            payload1 = "";
-        }
-        if (position2 == 5) {
-            bPackages.add(payload2);
-            payload2 = "";
+        for (Truck truck : trucks) {
+            if (truck.atDestination()) {
+                truck.dropPackage(destination);
+            }
         }
     }
 
     private void pickUpPackage() {
-        if (factoryPackages.isEmpty()) {
-            return;
-        }
-        if (position1 == 0) {
-            payload1 = factoryPackages.remove();
-        }
-        if (factoryPackages.isEmpty()) {
-            return;
-        }
-        if (position2 == 0) {
-            payload2 = factoryPackages.remove();
+        for (Truck truck : trucks) {
+            if(truck.atStart()) truck.pickup(factoryPackages);
         }
     }
 
     private void move() {
-        if (payload1.equals("")) {
-            position1--;
-        } else {
-            position1++;
-        }
-        if (payload2.equals("")) {
-            position2--;
-        } else {
-            position2++;
+        for (Truck truck : trucks) {
+            truck.move();
         }
     }
 
     private boolean done() {
-        return factoryPackages.isEmpty()
-            && payload1.equals("")
-            && payload2.equals("");
+        boolean factoryIsEmpty = factoryPackages.isEmpty();
+        boolean trucksAreEmpty = trucks.stream().allMatch(Truck::isEmpty);
+        return factoryIsEmpty && trucksAreEmpty;
     }
 }
