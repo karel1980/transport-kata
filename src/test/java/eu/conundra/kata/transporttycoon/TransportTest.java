@@ -4,38 +4,34 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 class TransportTest {
     @Test
-    void testA() {
-        List<String> packages = List.of("A");
-
-        Transporter transporter = new Transporter(packages);
-        assertThat(transporter.solve()).isEqualTo(5);
-    }
-
-    @Test
     void testB() {
-        List<String> packages = List.of("B");
-
-        Transporter transporter = new Transporter(packages);
-        assertThat(transporter.solve()).isEqualTo(5);
+        Transporter transporter = new Transporter();
+        assertThat(transporter.solve("B")).isEqualTo(5);
     }
 
     @Test
     void testBB() {
-        List<String> packages = List.of("B", "B");
-
-        Transporter transporter = new Transporter(packages);
-        assertThat(transporter.solve()).isEqualTo(5);
+        Transporter transporter = new Transporter();
+        assertThat(transporter.solve("B", "B")).isEqualTo(5);
     }
 
     @Test
     void testBBB() {
-        List<String> packages = List.of("B", "B", "B");
+        Transporter transporter = new Transporter();
+        assertThat(transporter.solve("B", "B", "B")).isEqualTo(15);
+    }
 
-        Transporter transporter = new Transporter(packages);
-        assertThat(transporter.solve()).isEqualTo(15);
+    @Test
+    void testA() {
+        Transporter transporter = new Transporter();
+        assertThat(transporter.solve("Q")).isEqualTo(5);
+    }
+
+    @Test
+    void testAA() {
+        Transporter transporter = new Transporter();
+        assertThat(transporter.solve("A", "A")).isEqualTo(5);
     }
 }
