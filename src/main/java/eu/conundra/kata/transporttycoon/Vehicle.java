@@ -3,10 +3,15 @@ package eu.conundra.kata.transporttycoon;
 import java.util.Queue;
 
 public class Vehicle {
+    private final Warehouse origin;
     private int position = 0;
     private String payload = "";
 
-    public boolean atStart() {
+    public Vehicle(Warehouse origin) {
+        this.origin = origin;
+    }
+
+    public boolean atOrigin() {
         return position == 0;
     }
 
@@ -19,7 +24,8 @@ public class Vehicle {
     }
 
     public void pickup(String parcel) {
-        this.payload = parcel;
+        if(origin.hasPackage())
+            this.payload = origin.pickup();
     }
 
     public void dropPackage(Queue<String> destination) {
