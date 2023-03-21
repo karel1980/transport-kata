@@ -5,18 +5,15 @@ import java.util.stream.Stream;
 
 public class Simulation {
     private final Warehouse factory;
-    private final Warehouse warehouseB;
     private final List<Vehicle> vehicles;
 
     public Simulation() {
         factory = new Warehouse();
-        warehouseB = new Warehouse();
-
         vehicles = List.of(new Vehicle(factory), new Vehicle(factory));
     }
 
     private Route toRoute(String routeName) {
-        return new Route(new Leg(factory, warehouseB, 5));
+        return new Route(new Leg(5));
     }
 
     public int solve(String... packages) {
