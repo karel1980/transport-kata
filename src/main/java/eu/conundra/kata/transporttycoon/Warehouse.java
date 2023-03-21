@@ -5,17 +5,17 @@ import java.util.List;
 import java.util.Queue;
 
 public class Warehouse {
-    private Queue<String> packages;
+    private Queue<Route> packages;
 
-    public void addPackages(String... packages) {
-        this.packages = new LinkedList<>(List.of(packages));
+    public void addPackages(List<Route> routes) {
+        this.packages = new LinkedList<>(routes);
     }
 
     public boolean isEmpty() {
         return packages.isEmpty();
     }
 
-    public String pickup() {
+    public Route pickup() {
         return packages.remove();
     }
 

@@ -5,7 +5,7 @@ import java.util.Queue;
 public class Vehicle {
     private final Warehouse origin;
     private int position = 0;
-    private String payload = "";
+    private Route route;
 
     public Vehicle(Warehouse origin) {
         this.origin = origin;
@@ -20,24 +20,28 @@ public class Vehicle {
     }
 
     public boolean isEmpty() {
-        return payload.equals("");
+        return route == null;
     }
 
     public void pickup() {
-        if(atOrigin() && origin.hasPackage())
-            this.payload = origin.pickup();
+        if(atOrigin() && origin.hasPackage()) {
+            this.route = origin.pickup();
+        }
     }
 
     public void dropPackage(Queue<String> destination) {
-        destination.add(payload);
-        payload = "";
+        if (atDestination()) {
+//            destination.add(route);
+            route.dropPackage();
+            route = null;
+        }
     }
 
     public void move() {
-        if (payload.equals("")) {
-            driveBack();
-        } else {
+        if (route != null) {
             driveForward();
+        } else {
+            driveBack();
         }
     }
 
@@ -53,7 +57,7 @@ public class Vehicle {
     public String toString() {
         return "Truck{" +
             "position=" + position +
-            ", payload='" + payload + '\'' +
+            ", payload='" + route + '\'' +
             '}';
     }
 }
