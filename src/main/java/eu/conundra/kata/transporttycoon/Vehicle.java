@@ -23,8 +23,8 @@ public class Vehicle {
         return payload.equals("");
     }
 
-    public void pickup(String parcel) {
-        if(origin.hasPackage())
+    public void pickup() {
+        if(atOrigin() && origin.hasPackage())
             this.payload = origin.pickup();
     }
 

@@ -20,7 +20,6 @@ public class Simulation {
     }
 
     public int solve(String... packages) {
-        Queue<String> factoryPackages = new LinkedList<>(List.of(packages));
         factory.addPackages(packages);
         var iterations = -1;
         do {
@@ -29,10 +28,22 @@ public class Simulation {
             }
             iterations++;
             dropPackage();
-            pickUpPackage(factoryPackages);
+            pickUpPackage();
             move();
         } while (!done());
         return iterations;
+    }
+
+    private void pickUpPackage() {
+        for (Vehicle vehicle : vehicles) {
+            vehicle.pickup();
+        }
+    }
+
+    private void move() {
+        for (Vehicle vehicle : vehicles) {
+            vehicle.move();
+        }
     }
 
     private void dropPackage() {
@@ -40,18 +51,6 @@ public class Simulation {
             if (vehicle.atDestination()) {
                 vehicle.dropPackage(destination);
             }
-        }
-    }
-
-    private void pickUpPackage(Queue<String> factoryPackages) {
-        for (Vehicle vehicle : vehicles) {
-            if(vehicle.atOrigin() && !factory.isEmpty()) vehicle.pickup(factoryPackages.remove());
-        }
-    }
-
-    private void move() {
-        for (Vehicle vehicle : vehicles) {
-            vehicle.move();
         }
     }
 
