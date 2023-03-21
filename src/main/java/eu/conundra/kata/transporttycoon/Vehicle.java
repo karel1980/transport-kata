@@ -53,9 +53,9 @@ public class Vehicle {
 
     @Override
     public String toString() {
-        return "Truck{" +
+        return "Vehicle{" +
             "position=" + position +
-            ", payload='" + route + '\'' +
+            ", route='" + route + '\'' +
             '}';
     }
 }
