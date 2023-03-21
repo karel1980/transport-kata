@@ -29,4 +29,14 @@ class TransportTest {
     void testAA() {
         assertThat(new Simulation().solve("A", "A")).isEqualTo(1 + (4 + 4) + 4);
     }
+
+    @Test
+    void testABB() {
+        assertThat(new Simulation().solve("A", "B", "B")).isEqualTo(7);
+    }
+
+    @Test
+    void testAABABBAB() {
+        assertThat(new Simulation().solve("A", "A", "B", "A", "B", "B", "A", "B")).isEqualTo(29);
+    }
 }
