@@ -6,11 +6,13 @@ import java.util.stream.Stream;
 
 public class Simulation {
     private final Warehouse factory;
+    private final Warehouse port;
     private final List<Vehicle> vehicles;
 
     public Simulation() {
         factory = new Warehouse();
-        vehicles = List.of(new Vehicle(factory), new Vehicle(factory));
+        port = new Warehouse();
+        vehicles = List.of(new Vehicle(factory), new Vehicle(factory), new Vehicle(port));
     }
 
     private Route toRoute(String routeName) {

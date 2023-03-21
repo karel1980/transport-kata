@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Queue;
 
 public class Warehouse {
-    private Queue<Route> packages;
+    private final Queue<Route> packages = new LinkedList<>();
 
     public void addPackages(List<Route> routes) {
-        this.packages = new LinkedList<>(routes);
+        packages.addAll(routes);
     }
 
     public boolean isEmpty() {
