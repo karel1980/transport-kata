@@ -1,11 +1,11 @@
 package eu.conundra.kata.transporttycoon;
 
 public class Leg {
-    private final int time;
+    private final int distance;
     private boolean finished;
 
-    public Leg(int time) {
-        this.time = time;
+    public Leg(int distance) {
+        this.distance = distance;
         this.finished = false;
     }
 
@@ -17,7 +17,7 @@ public class Leg {
         finished = true;
     }
 
-    public int time() {
-        return this.time;
+    public int distance() {
+        return this.distance;
     }
 }

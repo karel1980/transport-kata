@@ -14,8 +14,8 @@ public class Route {
         currentLeg().ifPresent(Leg::dropPackage);
     }
 
-    public int time() {
-        return currentLeg().map(Leg::time).orElse(0);
+    public int distance() {
+        return currentLeg().map(Leg::distance).orElse(0);
     }
 
     private Optional<Leg> currentLeg() {

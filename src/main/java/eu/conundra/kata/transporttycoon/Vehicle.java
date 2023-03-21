@@ -15,8 +15,7 @@ public class Vehicle {
 
     public boolean atDestination() {
         if(route == null) return false;
-        int time = route.time();
-        return position == time;
+        return position == route.distance();
     }
 
     public boolean isEmpty() {
@@ -45,7 +44,7 @@ public class Vehicle {
     }
 
     private void driveForward() {
-        position = Math.min(position + 1, 5);
+        position = Math.min(position + 1, route.distance());
     }
 
     private void driveBack() {
