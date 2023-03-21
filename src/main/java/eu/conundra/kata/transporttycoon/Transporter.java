@@ -7,7 +7,7 @@ import java.util.Queue;
 
 public class Transporter {
     private final Queue<String> factoryPackages;
-    private final List<String> destination = new ArrayList<>();
+    private final Queue<String> destination = new LinkedList<>();
     private final List<Truck> trucks = List.of(new Truck(), new Truck());
 
 

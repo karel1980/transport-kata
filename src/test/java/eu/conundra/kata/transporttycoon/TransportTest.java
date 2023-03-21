@@ -8,6 +8,14 @@ import java.util.List;
 
 class TransportTest {
     @Test
+    void testA() {
+        List<String> packages = List.of("A");
+
+        Transporter transporter = new Transporter(packages);
+        assertThat(transporter.solve()).isEqualTo(5);
+    }
+
+    @Test
     void testB() {
         List<String> packages = List.of("B");
 

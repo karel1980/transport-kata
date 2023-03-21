@@ -1,6 +1,5 @@
 package eu.conundra.kata.transporttycoon;
 
-import java.util.List;
 import java.util.Queue;
 
 public class Truck {
@@ -24,7 +23,7 @@ public class Truck {
         this.payload = factoryPackages.remove();
     }
 
-    public void dropPackage(List<String> destination) {
+    public void dropPackage(Queue<String> destination) {
         destination.add(payload);
         payload = "";
     }
