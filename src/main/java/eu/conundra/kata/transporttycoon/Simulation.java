@@ -1,26 +1,22 @@
 package eu.conundra.kata.transporttycoon;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.stream.Stream;
 
 public class Simulation {
-    private final Queue<String> destination = new LinkedList<>();
+    private final Warehouse factory;
+    private final Warehouse warehouseB;
     private final List<Vehicle> vehicles;
-    private Route routeB;
-    private Warehouse factory;
 
     public Simulation() {
         factory = new Warehouse();
-        Warehouse warehouseB = new Warehouse();
-        routeB = new Route(new Leg(factory, warehouseB, 5));
+        warehouseB = new Warehouse();
 
         vehicles = List.of(new Vehicle(factory), new Vehicle(factory));
     }
 
     private Route toRoute(String routeName) {
-        return routeB;
+        return new Route(new Leg(factory, warehouseB, 5));
     }
 
     public int solve(String... packages) {
@@ -52,7 +48,7 @@ public class Simulation {
 
     private void dropPackage() {
         for (Vehicle vehicle : vehicles) {
-            vehicle.dropPackage(destination);
+            vehicle.dropPackage();
         }
     }
 

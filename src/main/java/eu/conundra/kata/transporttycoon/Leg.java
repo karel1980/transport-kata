@@ -18,6 +18,10 @@ public class Leg {
     }
 
     public void dropPackage() {
+        finished = true;
+    }
 
+    public int time() {
+        return this.time;
     }
 }

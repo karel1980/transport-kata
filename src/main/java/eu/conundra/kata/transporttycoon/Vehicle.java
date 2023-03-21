@@ -1,7 +1,5 @@
 package eu.conundra.kata.transporttycoon;
 
-import java.util.Queue;
-
 public class Vehicle {
     private final Warehouse origin;
     private int position = 0;
@@ -16,7 +14,9 @@ public class Vehicle {
     }
 
     public boolean atDestination() {
-        return position == 5;
+        if(route == null) return false;
+        int time = route.time();
+        return position == time;
     }
 
     public boolean isEmpty() {
@@ -29,9 +29,8 @@ public class Vehicle {
         }
     }
 
-    public void dropPackage(Queue<String> destination) {
+    public void dropPackage() {
         if (atDestination()) {
-//            destination.add(route);
             route.dropPackage();
             route = null;
         }
