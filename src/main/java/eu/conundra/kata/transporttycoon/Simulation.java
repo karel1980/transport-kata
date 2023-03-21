@@ -20,14 +20,12 @@ public class Simulation {
         factory.addPackages(Stream.of(packages).map(this::toRoute).toList());
         var iterations = -1;
         do {
-            if (iterations > 100) {
-                throw new RuntimeException("Could not find a solution within 100 iterations");
-            }
+            if (iterations > 100) throw new RuntimeException("Could not find a solution within 100 iterations");
             iterations++;
             dropPackage();
             pickUpPackage();
             move();
-        } while (!done());
+        } while (parcelsInFlight());
         return iterations;
     }
 
@@ -47,6 +45,10 @@ public class Simulation {
         for (Vehicle vehicle : vehicles) {
             vehicle.dropPackage();
         }
+    }
+
+    private boolean parcelsInFlight() {
+        return !done();
     }
 
     private boolean done() {
