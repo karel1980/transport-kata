@@ -23,7 +23,7 @@ public class Warehouse {
         return routes.remove();
     }
 
-    public boolean hasPackage() {
+    public boolean hasPayload() {
         return !routes.isEmpty();
     }
 }

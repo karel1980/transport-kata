@@ -12,10 +12,10 @@ public class Route {
         this.legs = List.of(legs);
     }
 
-    public void dropPackage() {
+    public void dropPayload() {
         currentLeg().ifPresent(leg -> {
             leg.getDestination().add(this);
-            leg.dropPackage();
+            leg.dropPayload();
         });
     }
 

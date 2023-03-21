@@ -14,7 +14,7 @@ public class Leg {
         return !done;
     }
 
-    public void dropPackage() {
+    public void dropPayload() {
         done = true;
     }
 

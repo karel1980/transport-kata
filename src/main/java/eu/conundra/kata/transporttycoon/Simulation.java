@@ -20,17 +20,17 @@ public class Simulation {
         vehicles = List.of(new Vehicle(factory), new Vehicle(factory), new Vehicle(port));
     }
 
-    public int solve(String... packages) {
-        routes = Stream.of(packages).map(this::toRoute).toList();
+    public int solve(String... payloads) {
+        routes = Stream.of(payloads).map(this::toRoute).toList();
         factory.addAll(routes);
         var iterations = -1;
         do {
             if (iterations > 100) throw new RuntimeException("Could not find a solution within 100 iterations");
             iterations++;
-            execute(Vehicle::dropPackage);
-            execute(Vehicle::pickup);
+            execute(Vehicle::dropPayload);
+            execute(Vehicle::pickupPayload);
             execute(Vehicle::move);
-        } while (parcelsInFlight());
+        } while (payloadsInFlight());
         return iterations;
     }
 
@@ -42,13 +42,12 @@ public class Simulation {
         };
     }
 
-    private boolean parcelsInFlight() {
+    private boolean payloadsInFlight() {
         return !done();
     }
 
     private boolean done() {
-        boolean trucksAreEmpty = vehicles.stream().allMatch(Vehicle::isEmpty);
-        return factory.isEmpty() && trucksAreEmpty && routes.stream().allMatch(Route::isDone);
+        return routes.stream().allMatch(Route::isDone);
     }
 
     private void execute(Consumer<Vehicle> consumer) {

@@ -27,6 +27,6 @@ class TransportTest {
 
     @Test
     void testAA() {
-        assertThat(new Simulation().solve("A", "A")).isEqualTo(1 + 4 + 4 + 4);
+        assertThat(new Simulation().solve("A", "A")).isEqualTo(1 + (4 + 4) + 4);
     }
 }

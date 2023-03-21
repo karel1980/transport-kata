@@ -22,15 +22,15 @@ public class Vehicle {
         return route == null;
     }
 
-    public void pickup() {
-        if(atOrigin() && origin.hasPackage()) {
+    public void pickupPayload() {
+        if(atOrigin() && origin.hasPayload()) {
             this.route = origin.pickup();
         }
     }
 
-    public void dropPackage() {
+    public void dropPayload() {
         if (atDestination()) {
-            route.dropPackage();
+            route.dropPayload();
             route = null;
         }
     }
