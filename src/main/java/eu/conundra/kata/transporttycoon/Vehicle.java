@@ -2,7 +2,7 @@ package eu.conundra.kata.transporttycoon;
 
 import java.util.Queue;
 
-public class Truck {
+public class Vehicle {
     private int position = 0;
     private String payload = "";
 
@@ -18,9 +18,8 @@ public class Truck {
         return payload.equals("");
     }
 
-    public void pickup(Queue<String> factoryPackages) {
-        if (factoryPackages.isEmpty()) return;
-        this.payload = factoryPackages.remove();
+    public void pickup(String parcel) {
+        this.payload = parcel;
     }
 
     public void dropPackage(Queue<String> destination) {

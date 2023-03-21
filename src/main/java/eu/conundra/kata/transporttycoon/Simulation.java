@@ -6,10 +6,10 @@ import java.util.Queue;
 
 public class Simulation {
     private final Queue<String> destination = new LinkedList<>();
-    private final List<Truck> trucks;
+    private final List<Vehicle> vehicles;
 
     public Simulation() {
-        trucks = List.of(new Truck(), new Truck());
+        vehicles = List.of(new Vehicle(), new Vehicle());
     }
 
     public int solve(String... packages) {
@@ -28,28 +28,28 @@ public class Simulation {
     }
 
     private void dropPackage() {
-        for (Truck truck : trucks) {
-            if (truck.atDestination()) {
-                truck.dropPackage(destination);
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle.atDestination()) {
+                vehicle.dropPackage(destination);
             }
         }
     }
 
     private void pickUpPackage(Queue<String> factoryPackages) {
-        for (Truck truck : trucks) {
-            if(truck.atStart()) truck.pickup(factoryPackages);
+        for (Vehicle vehicle : vehicles) {
+            if(vehicle.atStart() && !factoryPackages.isEmpty()) vehicle.pickup(factoryPackages.remove());
         }
     }
 
     private void move() {
-        for (Truck truck : trucks) {
-            truck.move();
+        for (Vehicle vehicle : vehicles) {
+            vehicle.move();
         }
     }
 
     private boolean done(Queue<String> factoryPackages) {
         boolean factoryIsEmpty = factoryPackages.isEmpty();
-        boolean trucksAreEmpty = trucks.stream().allMatch(Truck::isEmpty);
+        boolean trucksAreEmpty = vehicles.stream().allMatch(Vehicle::isEmpty);
         return factoryIsEmpty && trucksAreEmpty;
     }
 }
