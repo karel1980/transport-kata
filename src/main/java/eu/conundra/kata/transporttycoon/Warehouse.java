@@ -5,21 +5,25 @@ import java.util.List;
 import java.util.Queue;
 
 public class Warehouse {
-    private final Queue<Route> packages = new LinkedList<>();
+    private final Queue<Route> routes = new LinkedList<>();
 
-    public void addPackages(List<Route> routes) {
-        packages.addAll(routes);
+    public void addAll(List<Route> routes) {
+        this.routes.addAll(routes);
+    }
+
+    public void add(Route route) {
+        routes.add(route);
     }
 
     public boolean isEmpty() {
-        return packages.isEmpty();
+        return routes.isEmpty();
     }
 
     public Route pickup() {
-        return packages.remove();
+        return routes.remove();
     }
 
     public boolean hasPackage() {
-        return !packages.isEmpty();
+        return !routes.isEmpty();
     }
 }

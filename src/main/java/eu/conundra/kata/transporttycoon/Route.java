@@ -4,14 +4,19 @@ import java.util.List;
 import java.util.Optional;
 
 public class Route {
+    private final String name;
     private final List<Leg> legs;
 
-    public Route(Leg... legs) {
+    public Route(String name, Leg... legs) {
+        this.name = name;
         this.legs = List.of(legs);
     }
 
     public void dropPackage() {
-        currentLeg().ifPresent(Leg::dropPackage);
+        currentLeg().ifPresent(leg -> {
+            leg.getDestination().add(this);
+            leg.dropPackage();
+        });
     }
 
     public int distance() {
@@ -20,5 +25,14 @@ public class Route {
 
     private Optional<Leg> currentLeg() {
         return legs.stream().filter(Leg::unfinished).findFirst();
+    }
+
+    public boolean isDone() {
+        return legs.stream().allMatch(Leg::isDone);
+    }
+
+    @Override
+    public String toString() {
+        return "Route " + name;
     }
 }

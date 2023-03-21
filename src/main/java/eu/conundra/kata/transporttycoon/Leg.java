@@ -2,22 +2,31 @@ package eu.conundra.kata.transporttycoon;
 
 public class Leg {
     private final int distance;
-    private boolean finished;
+    private Warehouse destination;
+    private boolean done;
 
-    public Leg(int distance) {
+    public Leg(int distance, Warehouse destination) {
         this.distance = distance;
-        this.finished = false;
+        this.destination = destination;
     }
 
     public boolean unfinished() {
-        return !finished;
+        return !done;
     }
 
     public void dropPackage() {
-        finished = true;
+        done = true;
     }
 
     public int distance() {
         return this.distance;
+    }
+
+    public boolean isDone() {
+        return done;
+    }
+
+    public Warehouse getDestination() {
+        return destination;
     }
 }

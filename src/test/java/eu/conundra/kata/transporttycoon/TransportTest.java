@@ -22,11 +22,11 @@ class TransportTest {
 
     @Test
     void testA() {
-        assertThat(new Simulation().solve("Q")).isEqualTo(5);
+        assertThat(new Simulation().solve("A")).isEqualTo(5);
     }
 
     @Test
     void testAA() {
-        assertThat(new Simulation().solve("A", "A")).isEqualTo(5);
+        assertThat(new Simulation().solve("A", "A")).isEqualTo(1 + 4 + 4 + 4);
     }
 }
