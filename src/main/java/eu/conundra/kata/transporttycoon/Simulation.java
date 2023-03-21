@@ -4,10 +4,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-public class Transporter {
+public class Simulation {
     private final Queue<String> destination = new LinkedList<>();
-    private final List<Truck> trucks = List.of(new Truck(), new Truck());
+    private final List<Truck> trucks;
 
+    public Simulation() {
+        trucks = List.of(new Truck(), new Truck());
+    }
 
     public int solve(String... packages) {
         Queue<String> factoryPackages = new LinkedList<>(List.of(packages));
